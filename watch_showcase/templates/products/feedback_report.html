@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Feedback Report | Watch Showcase{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Watch Feedback Report</h1>
+        <p class="lead">All customer feedback and ratings.</p>
+    </div>
+</div>
+<!-- Top rated watches -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Top Rated Watches</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Watch</th>
+                                <th>Brand</th>
+                                <th>Rating</th>
+                                <th>Price</th>
+                                <th>Reviews</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for watch in watches %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ watch.name }}</td>
+                                    <td>{{ watch.brand }}</td>
+                                    <td>
+                                        {% if watch.avg_rating %}
+                                            <div class="text-warning">
+                                                {% for i in "12345" %}
+                                                    {% if forloop.counter <= watch.avg_rating|floatformat:"0" %}
+                                                        ★
+                                                    {% else %}
+                                                        ☆
+                                                    {% endif %}
+                                                {% endfor %}
+                                                ({{ watch.avg_rating|floatformat:"1" }})
+                                            </div>
+                                        {% else %}
+                                            <span class="text-muted">No ratings</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>${{ watch.price }}</td>
+                                    <td>{{ watch.reviews.count }}</td>
+                                    <td>
+                                        <a href="{% url 'watch_detail' watch.id %}" class="btn btn-sm btn-outline-primary">View</a>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center">No watches available</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- All reviews -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h3 class="mb-0">All Reviews</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Watch</th>
+                                <th>User</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for review in reviews %}
+                                <tr>
+                                    <td>{{ review.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'watch_detail' review.watch.id %}">
+                                            {{ review.watch.brand }} {{ review.watch.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ review.user.username }}</td>
+                                    <td class="text-warning">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                                ★
+                                            {% else %}
+                                                ☆
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>{{ review.comment|truncatechars:100 }}</td>
+                                </tr>
+                            {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No reviews yet</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Export options -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Export Options</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="d-grid">
+                            <a href="#" class="btn btn-outline-primary">CSV Export</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-grid">
+                            <a href="#" class="btn btn-outline-primary">PDF Export</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-grid">
+                            <a href="#" class="btn btn-outline-primary">Print Report</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+    function printReport() {
+        window.print();
+    }
+</script>
+{% endblock %}

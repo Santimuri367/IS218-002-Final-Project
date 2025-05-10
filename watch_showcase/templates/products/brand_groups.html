@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Watch Brand Groups | Watch Showcase{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="mb-4">Brand Discussion Groups</h1>
+        <p class="lead">Join groups for your favorite watch brands.</p>
+    </div>
+</div>
+<!-- Brand groups -->
+<div class="row">
+    {% for brand in brands %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">{{ brand.name }}</h3>
+            </div>
+            <div class="card-body">
+                <p>{{ brand.description }}</p>
+                <p><span class="badge bg-secondary">{{ brand.members.count }} members</span></p>
+                <p><span class="badge bg-info">{{ brand.discussions.count }} discussions</span></p>
+            </div>
+            <div class="card-footer d-grid">
+                <a href="{% url 'group_detail' brand.slug %}" class="btn btn-outline-primary">View Group</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            No brand groups available yet. Check back soon.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<!-- Create group form  -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Create a Brand Group</h3>
+            </div>
+            <div class="card-body">
+                <p>Don't see your favorite brand? Create a group for it!</p>
+                {% if user.is_authenticated %}
+                <a href="{% url 'group_create' %}" class="btn btn-success">Create Group</a>
+                {% else %}
+                <div class="alert alert-warning">
+                    Please <a href="{% url 'login' %}">log in</a> to create a group.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

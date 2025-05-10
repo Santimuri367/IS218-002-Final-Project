@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Search Results | Watch Showcase{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Search Results for "{{ query }}"</h2>
+    {% if watches %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {% for watch in watches %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if watch.image %}
+                            <img src="{{ watch.image.url }}" class="card-img-top" alt="{{ watch.name }}">
+                        {% else %}
+                            <div class="bg-light text-center p-5">No Image</div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ watch.name }}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ watch.brand }}</h6>
+                            <p class="card-text">{{ watch.description|truncatewords:20 }}</p>
+                        </div>
+                        <div class="card-footer bg-white border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fs-5 fw-bold">${{ watch.price }}</span>
+                                <a href="{% url 'watch_detail' watch.id %}" class="btn btn-primary">View Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No watches found matching "{{ query }}". Try a different search term.
+        </div>
+    {% endif %}
+    <div class="mt-4">
+        <a href="{% url 'watch_list' %}" class="btn btn-outline-secondary">Back to Watches</a>
+    </div>
+</div>
+{% endblock %}

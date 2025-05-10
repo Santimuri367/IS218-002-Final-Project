@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ watch.brand }} {{ watch.name }} | Watch Showcase{% endblock %}
+{% block content %}
+<div class="row">
+    <!-- image and prices -->
+    <div class="col-md-5">
+        {% if watch.image %}
+            <div class="card mb-4">
+                <img src="{{ watch.image.url }}" class="card-img-top" alt="{{ watch.name }}">
+            </div>
+        {% else %}
+            <div class="bg-light text-center p-5 mb-4 rounded">
+                <span class="display-4 text-muted">No Image</span>
+            </div>
+        {% endif %}
+        <!-- Price comparison box -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Price Check</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Our Price</span>
+                    <span class="badge bg-primary rounded-pill">${{ watch.price }}</span>
+                </div>
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>MSRP</span>
+                    <span class="badge bg-secondary rounded-pill">${{ watch.retail_price }}</span>
+                </div>
+                {% if watch.amazon_price %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Amazon</span>
+                    <span class="badge bg-info text-dark rounded-pill">${{ watch.amazon_price }}</span>
+                </div>
+                {% endif %}
+                {% if watch.ebay_price %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>eBay</span>
+                    <span class="badge bg-warning text-dark rounded-pill">${{ watch.ebay_price }}</span>
+                </div>
+                {% endif %}
+                {% if watch.chrono24_price %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Chrono24</span>
+                    <span class="badge bg-danger rounded-pill">${{ watch.chrono24_price }}</span>
+                </div>
+                {% endif %}
+                {% if watch.get_best_price %}
+                <div class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+                    <span>Best Deal</span>
+                    <span class="badge bg-success rounded-pill">${{ watch.get_best_price }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <!-- Details and reviews -->
+    <div class="col-md-7">
+        <h1 class="mb-1">{{ watch.brand }} {{ watch.name }}</h1>
+        {% if watch.model_number %}
+            <p class="text-muted mb-3">Model: {{ watch.model_number }}</p>
+        {% endif %}
+        <!-- Description section -->
+        <div class="mb-4">
+            <h3>Description</h3>
+            <p>{{ watch.description|linebreaks }}</p>
+        </div>
+        <!-- History section -->
+        {% if watch.history %}
+            <div class="mb-4">
+                <h3>History</h3>
+                <p>{{ watch.history|linebreaks }}</p>
+            </div>
+        {% endif %}
+        <!-- Reviews section -->
+        <div class="card mt-5">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Reviews</h4>
+                <span class="badge bg-secondary">{{ reviews.count }}</span>
+            </div>
+            <div class="card-body">
+                <!-- Add review form -->
+                {% if user.is_authenticated %}
+                    <h5>Write a Review</h5>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="id_rating" class="form-label">Rating</label>
+                            <select name="rating" id="id_rating" class="form-select">
+                                <option value="5">★★★★★ (5/5)</option>
+                                <option value="4">★★★★☆ (4/5)</option>
+                                <option value="3">★★★☆☆ (3/5)</option>
+                                <option value="2">★★☆☆☆ (2/5)</option>
+                                <option value="1">★☆☆☆☆ (1/5)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_comment" class="form-label">Your Review</label>
+                            <textarea name="comment" id="id_comment" rows="3" class="form-control"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                {% else %}
+                    <div class="alert alert-info">
+                        Please <a href="{% url 'login' %}">log in</a> to write a review.
+                    </div>
+                {% endif %}
+                <hr>
+                <!-- List of reviews -->
+                <div class="reviews mt-4">
+                    {% for review in reviews %}
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">
+                                        {{ review.user.username }}
+                                    </h5>
+                                    <div class="review-rating">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                                <span class="text-warning">★</span>
+                                            {% else %}
+                                                <span class="text-muted">☆</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <p class="card-text">{{ review.comment|linebreaks }}</p>
+                                <div class="text-muted small">
+                                    Posted on {{ review.created_at|date:"F j, Y" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="alert alert-light text-center">
+                            No reviews yet. Be the first!
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

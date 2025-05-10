@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Watch Groups | Watch Showcase{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Special Interest Groups</h1>
+            <p class="lead">Join groups focused on specific aspects of watch collecting.</p>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <!-- Beginner Group -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">First-Time Buyer Help</h3>
+                </div>
+                <div class="card-body">
+                    <p>New to watches? Get help with your first purchase, learn basics, and find watches in your budget.</p>
+                    <p><strong>Topics:</strong></p>
+                    <ul>
+                        <li>Buying guides for different budgets</li>
+                        <li>Watch terms explained</li>
+                        <li>Good starter brands</li>
+                        <li>Avoiding fakes</li>
+                    </ul>
+                </div>
+                <div class="card-footer d-grid">
+                    <a href="{% url 'group_detail' 'first-time-buyer-help' %}" class="btn btn-outline-primary">Join Group</a>
+                </div>
+            </div>
+        </div>
+        <!-- Dress Watch Group -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">Dress Watch Fans</h3>
+                </div>
+                <div class="card-body">
+                    <p>For fans of elegant watches made for formal occasions. Discuss classic styles and find your perfect dress watch.</p>
+                    <p><strong>Topics:</strong></p>
+                    <ul>
+                        <li>Design principles</li>
+                        <li>Classic vs. modern styles</li>
+                        <li>Materials and features</li>
+                        <li>Pairing with formal clothes</li>
+                    </ul>
+                </div>
+                <div class="card-footer d-grid">
+                    <a href="{% url 'group_detail' 'dress-watch-enthusiasts' %}" class="btn btn-outline-info">Join Group</a>
+                </div>
+            </div>
+        </div>
+        <!-- Vintage Watch Group -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-warning text-dark">
+                    <h3 class="mb-0">Vintage Watch Lovers</h3>
+                </div>
+                <div class="card-body">
+                    <p>For collectors of vintage timepieces. Share your finds, discuss repairs, and explore watch history.</p>
+                    <p><strong>Topics:</strong></p>
+                    <ul>
+                        <li>Authenticity and value</li>
+                        <li>Repair and maintenance</li>
+                        <li>History of specific models</li>
+                        <li>Collecting tips</li>
+                    </ul>
+                </div>
+                <div class="card-footer d-grid">
+                    <a href="{% url 'group_detail' 'vintage-watch-enthusiasts' %}" class="btn btn-outline-warning">Join Group</a>
+                </div>
+            </div>
+        </div>
+        <!-- Microbrand Group -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">New Brand Discoveries</h3>
+                </div>
+                <div class="card-body">
+                    <p>Discover emerging watchmakers and microbrands creating innovative watches outside the mainstream market.</p>
+                    <p><strong>Topics:</strong></p>
+                    <ul>
+                        <li>Microbrand reviews</li>
+                        <li>Crowdfunded watch projects</li>
+                        <li>Independent watchmakers</li>
+                        <li>Good value offerings</li>
+                    </ul>
+                </div>
+                <div class="card-footer d-grid">
+                    <a href="{% url 'group_detail' 'upcoming-brands-talk' %}" class="btn btn-outline-success">Join Group</a>
+                </div>
+            </div>
+        </div>
+        <!-- Modding Group -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">DIY & Mods</h3>
+                </div>
+                <div class="card-body">
+                    <p>For hands-on enthusiasts who enjoy modifying watches or building them from parts.</p>
+                    <p><strong>Topics:</strong></p>
+                    <ul>
+                        <li>Mod how-tos</li>
+                        <li>Finding parts</li>
+                        <li>Tool recommendations</li>
+                        <li>Custom modifications</li>
+                    </ul>
+                </div>
+                <div class="card-footer d-grid">
+                    <a href="{% url 'group_detail' 'diy-builds-modifications' %}" class="btn btn-outline-danger">Join Group</a>
+                </div>
+            </div>
+        </div>
+        <!-- General Group -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-secondary text-white">
+                    <h3 class="mb-0">General Discussion</h3>
+                </div>
+                <div class="card-body">
+                    <p>A place for all watch topics. Discuss news, collecting thoughts, celebrity watches, and more.</p>
+                    <p><strong>Topics:</strong></p>
+                    <ul>
+                        <li>Industry news</li>
+                        <li>Celebrity watches</li>
+                        <li>Collecting advice</li>
+                        <li>Watch accessories</li>
+                    </ul>
+                </div>
+                <div class="card-footer d-grid">
+                    <a href="{% url 'group_detail' 'general-discourse' %}" class="btn btn-outline-secondary">Join Group</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Group suggestion card -->
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="mb-0">Suggest a Group</h3>
+                </div>
+                <div class="card-body">
+                    <p>Have an idea for a group that doesn't exist yet? Let us know!</p>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'group_create' %}" class="btn btn-dark">Suggest Group</a>
+                    {% else %}
+                    <div class="alert alert-warning">
+                        Please <a href="{% url 'login' %}">log in</a> to suggest a group.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
